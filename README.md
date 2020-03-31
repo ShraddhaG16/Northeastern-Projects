@@ -1,2 +1,2 @@
 # Northeastern-Projects
-Contains all the codes ran during Master's course
+Contains codes from R software performed during Master's course
