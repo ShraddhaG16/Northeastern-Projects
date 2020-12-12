@@ -1,2 +1,3 @@
 # Northeastern-Projects
-Contains compiled codes from various Projects accomplished during Masters Program written in R and Python.
+Contains all codes in the following Course Order:
+Intermediate Analytics-Enterprise Analytics-Data Mining Applications-Communication & Visualization-Predictive Analytics-Experiential Learning-Data Warehousing & SQL
