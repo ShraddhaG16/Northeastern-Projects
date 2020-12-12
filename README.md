@@ -1,3 +1,3 @@
 # Northeastern-Projects
 
-Intermediate Analytics /n Enterprise Analytics /n Data Mining Applications /n Communication & Visualization /n Predictive Analytics /n Experiential Learning /n Data Warehousing & SQL
+Contains codes for all 7 courses from the 1st Academic Year of Masters program.
