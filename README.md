@@ -1,2 +1,2 @@
 # Northeastern-Projects
-Contains R software codes used in the Master's projects.
+Contains software codes written in R and Python from the major Projects during Master's Program.
