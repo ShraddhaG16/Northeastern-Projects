@@ -1,9 +1,3 @@
 # Northeastern-Projects
 
-Intermediate Analytics
-Enterprise Analytics
-Data Mining Applications
-Communication & Visualization
-Predictive Analytics
-Experiential Learning
-Data Warehousing & SQL
+Intermediate Analytics /n Enterprise Analytics /n Data Mining Applications /n Communication & Visualization /n Predictive Analytics /n Experiential Learning /n Data Warehousing & SQL
