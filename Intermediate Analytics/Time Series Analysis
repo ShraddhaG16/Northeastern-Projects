@@ -1,0 +1,97 @@
+#PART A - Decomposing Time Series
+
+?nottem
+nottem
+
+nottem_time_series <- ts(nottem)
+nottem_time_series
+nottem_time_series <- ts(nottem, frequency=4, start=c(1930,2),end=c(1939,3))
+nottem_time_series
+plot.ts(nottem_time_series)
+log_nottem <- log(nottem_time_series)
+plot.ts(log_nottem)
+
+#Decomposing Non seasonal data
+library(TTR)
+
+ts_nottem_SMA12 <- SMA(nottem_time_series,n=12)
+plot.ts(ts_nottem_SMA12)
+
+#Decomposing Seasonal data
+nottem_components <- decompose(nottem_time_series)
+nottem_components$seasonal
+plot(nottem_components)
+
+nottem_seasonallyadjusted <- nottem_time_series - nottem_components$seasonal
+plot(nottem_seasonallyadjusted)
+
+#PART B -> 1 Hypothesis Testing
+?urca
+library(urca)
+data("UKconsumption")
+UKconsumption
+?UKconsumption
+mod = lm(cons ~ price + inc, data=UKconsumption)
+mod
+
+library(lmtest)
+dwtest(mod)  #Durbin-Watson Test
+resd = resid(mod)
+resd
+data.frame(resd)
+
+
+#PART B -> 2 ARIMA Model
+library(forecast)
+class(UKconsumption)
+start(UKconsumption)
+end(UKconsumption)
+frequency(UKconsumption)
+sum(is.na(UKconsumption))
+summary(UKconsumption)
+plot(UKconsumption)
+cycle(UKconsumption)
+boxplot((UKconsumption)~cycle(UKconsumption))
+
+UKConsumption1 = UKconsumption[ ,c(-2,-3)]
+UKConsumption1
+
+#CREATING ARIMA MODEL
+mymodel <- auto.arima(UKConsumption1)
+mymodel
+ 
+#Finding right parameters for use in arima model
+acf(UKConsumption1)
+acf(diff(log(UKConsumption1)))
+pacf(diff(log(UKConsumption1)))
+plot(diff(log(UKConsumption1)))
+auto.arima(UKConsumption1,ic="aic", trace=TRUE)
+plot.ts(mymodel$residuals)
+
+myforecast <- forecast(mymodel,level=c(95),h=5*12)
+plot(myforecast)
+Box.test(mymodel$residuals,lag=5,type="Ljung-Box")
+Box.test(mymodel$residuals,lag=10,type="Ljung-Box")
+Box.test(mymodel$residuals,lag=15,type="Ljung-Box")
+
+fit <- arima(log(UKConsumption1), c(2,1,0), seasonal= list(order = c(2,1,0), period=4))
+pred <- predict(fit, n.ahead = 8*12)
+pred1 <- 2.718^pred$pred
+ts.plot(UKConsumption1, 2.718^pred$pred, log="y", lty=c(1,3))
+
+#TESTING ARIMA MODEL
+datawide <- ts(UKConsumption1, frequency=4, start=c(1957,1), end=c(1967,4))
+datawide
+
+fit <- arima(log(datawide), c(2,1,0), seasonal=list(order=c(2,1,0), period=4))
+pred <- predict(fit, n.ahead = 8*4)
+pred$pred
+pred1 <- 2.718^pred$pred
+pred1
+data1 <- tail(pred1,4)
+data1
+
+predicted_1975 <-  round(data1, digits=0)
+predicted_1975
+original_1975 <- tail(UKConsumption1,4)
+original_1975   
