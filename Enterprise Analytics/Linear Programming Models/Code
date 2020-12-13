@@ -1,0 +1,73 @@
+#Linear Programming Model: Import library lpsolve from R 
+install.packages("lpSolve")
+library("lpSolve")
+
+#Products Abbreviation
+# pw Pressure Washer
+# gk Go-kart
+# gen Generator
+# wp Water Pump
+
+
+#Decision Variables:
+pw <-NULL
+pw.cp <-365
+pw.sp <-479.99
+pw.len <-5
+pw.profit <-pw.sp-pw.cp
+
+gk <-NULL
+gk.cp <-368
+gk.sp <-629.99
+gk.len <-8
+gk.profit <-gk.sp-gk.cp
+
+gen <-NULL
+gen.cp <-411
+gen.sp <-599.99
+gen.len <-5
+gen.profit <-gen.sp-gen.cp
+
+wp <-NULL
+wp.cp <-567
+wp.sp <-369.99
+wp.len <-6
+wp.profit <-wp.sp-wp.cp
+
+total.budget <-175000
+total.space.length<-30
+
+
+#Set the Coefficients of decision variables
+z.obj <- c(pw.profit, gk.profit, gen.profit,wp.profit)
+z.obj
+#Setting the coefficients of constraints in the matrix
+z.con <- matrix (c(pw.cp, gk.cp, gen.cp, wp.cp, pw.len, gk.len, gen.len, wp.len, 1, 1, 0, 0, 0, 0, 2, -1), nrow=4, byrow=TRUE)
+z.con
+
+#Inequality symbol of the constraints
+z.dir <- c("<=", "<=", ">=", ">=")
+z.dir
+
+#Right hand side of the equation
+z.rhs <- c(175000, 2400, 0, 0)
+z.rhs
+
+#Maximizing the profit
+max.profit<-lp("max", z.obj, z.con, z.dir, z.rhs)
+max.profit
+max.profit.sol<-max.profit$solution
+max.profit.sol
+
+#Get Sensitivities
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$sens.coez
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$sens.coez.from
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$sens.coez.to
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$duals
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$duals.from
+lp ("max", z.obj, z.con, z.dir, z.rhs, compute.sens=TRUE)$duals.to
+
+#To view output in integer form
+lp ("max", z.obj, z.con, z.dir, z.rhs, int.vec=1:3)$solution
+lp ("max", z.obj, z.con, z.dir, z.rhs, int.vec=1:3)
+ 
