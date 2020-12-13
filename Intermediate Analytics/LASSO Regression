@@ -1,0 +1,55 @@
+install.packages("ncvreg")
+install.packages("bigmemory")
+install.packages("biglasso")
+install.packages("Matrix")
+library("ncvreg")
+library("Matrix")
+library("bigmemory")
+library("biglasso")
+
+install.packages("glmnet") #Extremely efficient for fitting the entire lasso regularization path
+library(glmnet) 
+
+install.packages("lars")  #Efficient procedures for fitting an entire lasso sequence with the cost of a single least squares fit
+library(lars)
+
+data(diabetes)
+diabetes
+attach(diabetes)
+
+summary(diabetes$x)
+par(mfrow=c(2,5))        #Setting the plot area row and column dimensions
+for(i in 1:10)
+{
+  plot(diabetes$x[,i], y, xlab=colnames(diabetes$x)[i])
+  abline(lm(y~diabetes$x[,i]))
+}                       #Obtain scatterplots for each predictor in x with y along with trend line by using a loop
+
+ols <- lm(y ~ diabetes$x) #Applying linear regression to y and x attributes of diabetes column using lm() function
+summary(ols)
+lasso <- glmnet(diabetes$x, y) #lasso is a variable to which glmnet function is assigned
+plot(lasso, xvar = "norm", label = TRUE) # plotting path of each of x’s coefficients against the L1 norm of the supporting vectors
+
+cv_graph <- cv.glmnet(x=diabetes$x, y=y, alpha = 1, nlambda = 1000)
+plot(cv_graph)
+
+cv_graph$lambda.min     #Finding the value of lambda that minimizes the mean cross validation error; cv_graph is a variable to which cv.glmnet() function is assigned
+fit <- glmnet(x=diabetes$x, y=y, alpha = 1, lambda=cv_graph$lambda.min)
+fit$beta                #$beta is used for getting the beta β distribution values for the matrix
+cv_graph$lambda.1se 
+fit <- glmnet(x=diabetes$x, y=y, alpha = 1, lambda=cv_graph$lambda.1se)
+fit$beta                #fit is the variable on which beta distribution is applied
+
+ols2 <- lm(y~diabetes$x2) #Applying linear regression to y and x2 attributes of diabetes column using lm() function
+
+summary(ols2)             #ols2 is the variable to which ordinary least squares method is applied
+lasso1 <- glmnet(diabetes$x2, y)   #lasso1 is a variable to which glmnet function is assigned
+plot(lasso1, xvar = "norm", label = TRUE)   # plotting path of each of x2’s coefficients against the L1 norm of the supporting vectors 
+
+cv_graph1 <- cv.glmnet(x=diabetes$x2, y=y, alpha = 1, nlambda = 1000)
+plot(cv_graph1) 
+cv_graph1$lambda.1se      #Finding the value of lambda that minimizes the mean cross validation error; cv_graph1 is a variable to which cv.glmnet() function is assigned
+
+fit1 <- glmnet(x=diabetes$x2, y=y, alpha = 1, lambda=cv_graph1$lambda.min) 
+#glmnet() function to figure out 
+fit1$beta                 #$beta is used for getting the beta β distribution values for the desired matrix
