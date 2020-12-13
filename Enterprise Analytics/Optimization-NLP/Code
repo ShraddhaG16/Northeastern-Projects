@@ -1,0 +1,25 @@
+setwd("C:/Users/Owner/Documents")
+hwdata <-read.csv("DATA6.csv")
+hwdata
+str(hwdata)
+
+mydata <- hwdata[,c("Open","High","Low","Close","Volume")]
+mydata
+
+install.packages("mFilter")
+library("mFilter")
+stock <- hpfilter(log(mydata$Close),freq = 1600, type=c("lambda","frequency"),drift=FALSE)
+stock
+
+#Q.3
+plot(stock)
+
+#cyclic
+plot(stock$cycle)
+plot(stock$trend)
+
+#Q.5
+plot(stock$trend,mydata$Close, type = "o", col = "blue")
+plot(stock$trend,mydata$Close, type = "h", col="pink")
+
+  
